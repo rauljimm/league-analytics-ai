@@ -13,3 +13,12 @@ if __name__ == "__main__":
     # Obtener estadísticas del Summoner
     stats = lol_service.get_stats_by_summoner(summoner)
     print(stats)
+
+    # Obtener las últimas 20 partidas (puedes ajustar 'count' o agregar 'queue')
+    matches = lol_service.get_matches_by_summoner(summoner, count=20, queue=420)  # 420 = Ranked Solo/Duo
+    if matches:
+        print(f"\nSe encontraron {len(matches)} partidas:")
+        for match in matches:
+            print(f"Partida: {match['metadata']['matchId']}")
+    else:
+        print("No se pudieron obtener las partidas.")
