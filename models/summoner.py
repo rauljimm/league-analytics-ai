@@ -5,10 +5,11 @@ class Summoner:
         self.tagline = tagline
         self.league_id = None
         self.rank_solo = None
-        self.wins = None
-        self.losses = None
+        self.wins_solo = None
+        self.losses_solo = None
         self.hot_streak = None
-        self.winrate = None
+        self.winrate_solo = None
+        self.matches_ids = None
 
 
         # Validar que los datos no sean None o vacíos
