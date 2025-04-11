@@ -26,6 +26,10 @@ class LeagueAnalyticsService:
             response.raise_for_status()
             data = response.json()
             print("Información obtenida con éxito.")
+            summoner.rank_solo = data['tier'] + " " + data['rank'] + data['leaguePoints']
+            summoner.hot_streak = data['hotstreak']
+            summoner.wins_solo = data['wins']
+            summoner.x
             return data
         except requests.exceptions.HTTPError as http_err:
             print(f"Error HTTP: {http_err}, Código: {response.status_code}")
@@ -77,4 +81,18 @@ class LeagueAnalyticsService:
             if match_data:
                 matches.append(match_data)
         return matches
+
+    def get_on_going_match_by_summoner(self, summoner: Summoner):
+        url = f"{self.league_analytics.league_base}/lol/spectator/v5/active-games/by-summoner/{summoner.puuid}"
+        print(f"Realizando solicitud a: {url}")
+        try:
+            response = requests.get(url, headers=self.headers, timeout=self.league_analytics.timeout)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.HTTPError as http_err:
+            print(f"Error HTTP: {http_err}, Código: {response.status_code}")
+            print(f"Respuesta del servidor: {response.text}")
+        except requests.exceptions.RequestException as req_err:
+            print(f"Error en la solicitud: {req_err}")
+        return None
 
