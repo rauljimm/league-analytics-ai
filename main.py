@@ -1,29 +1,36 @@
-from models.summoner import Summoner
-from models.league_analytics import LeagueAnalytics
-from services.league_analytics_service import LeagueAnalyticsService
+# main.py
+from views.register_view import RegisterView
+from views.login_view import LoginView
+
+class App:
+    def __init__(self):
+        self.register_view = None
+        self.login_view = None
+    
+    def show_register(self):
+        if self.login_view:
+            self.login_view.hide()
+        if not self.register_view:
+            self.register_view = RegisterView(switch_to_login_callback=self.show_login)
+        self.register_view.show()
+    
+    def show_login(self):
+        if self.register_view:
+            self.register_view.hide()
+        if not self.login_view:
+            self.login_view = LoginView(switch_to_register_callback=self.show_register)
+        self.login_view.show()
+    
+    def run(self):
+        self.show_login()
+        if self.login_view:
+            self.login_view.mainloop()
+        elif self.register_view:
+            self.register_view.mainloop()
+
+def main():
+    app = App()
+    app.run()
 
 if __name__ == "__main__":
-    # Inicializar la API y el servicio
-    lol = LeagueAnalytics("Your-API-KEY", timeout=10)
-    lol_service = LeagueAnalyticsService(lol)
-
-    # Crear el Summoner
-    summoner = Summoner("BzXBjorxaNfqs6GJO9kk_758-FxtJyPBlJLsrlCmnLnSdsJxbLZ5KKIW4mkktB4qtOLpxgEe79KMwQ", "tirko", "EUW")
-
-    # Obtener estadísticas del Summoner
-    stats = lol_service.get_stats_by_summoner(summoner)
-    print(stats)
-
-    print(lol_service.get_on_going_match_by_summoner(summoner))
-
-    print(lol_service.get_stats_by_summoner(summoner))
-
-    # Obtener las últimas 20 partidas (puedes ajustar 'count' o agregar 'queue')
-    matches = lol_service.get_matches_by_summoner(summoner, count=1, queue=420)  # 420 = Ranked Solo/Duo
-    if matches:
-        print(f"\nSe encontraron {len(matches)} partidas:")
-        for match in matches:
-            #print(lol_service.get_match_details(match))
-            print(f"Partida: {match['metadata']['matchId']}")
-    else:
-        print("No se pudieron obtener las partidas.")
+    main()
