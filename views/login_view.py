@@ -68,7 +68,6 @@ class LoginView(ctk.CTk):
         
         self.bind("<Configure>", self.on_resize)
         
-        # Cola para manejar respuestas desde el hilo secundario
         self.response_queue = queue.Queue()
         self.check_queue()
     

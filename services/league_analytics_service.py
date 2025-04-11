@@ -10,8 +10,7 @@ class LeagueAnalyticsService:
         }
 
     def get_summoner(self) -> Summoner:
-        # Este método está incompleto en tu código original, lo dejo como placeholder
-        # Si necesitas implementarlo, podrías buscar un summoner por nombre aquí
+
         return None
 
     def get_stats_by_summoner(self, summoner: Summoner):
