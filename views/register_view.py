@@ -76,8 +76,8 @@ class RegisterView(ctk.CTk):
         
         self.bind("<Configure>", self.on_resize)
         
-        # Cola para manejar respuestas desde el hilo secundario
         self.response_queue = queue.Queue()
+        self.running = True  # Bandera para controlar check_queue
         self.check_queue()
     
     def register_callback(self):
@@ -104,17 +104,17 @@ class RegisterView(ctk.CTk):
         except requests.exceptions.RequestException as e:
             message = f"Error de conexión: {str(e)}"
         
-        # Colocar el mensaje en la cola
         self.response_queue.put(message)
     
     def check_queue(self):
+        if not self.running:
+            return
         try:
             while not self.response_queue.empty():
                 message = self.response_queue.get_nowait()
                 self._update_status(message)
         except queue.Empty:
             pass
-        # Revisar la cola cada 100 ms
         self.after(100, self.check_queue)
     
     def _update_status(self, message):
@@ -146,3 +146,7 @@ class RegisterView(ctk.CTk):
     
     def hide(self):
         self.withdraw()
+    
+    def destroy(self):
+        self.running = False 
+        super().destroy()
