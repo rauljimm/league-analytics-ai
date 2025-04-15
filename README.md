@@ -1,57 +1,72 @@
-LoL Match Prediction Pipeline 🎮
+# 🎯 LoL Match Prediction Pipeline
 
 A comprehensive pipeline for scraping League of Legends (LoL) match data, extracting features, and predicting match outcomes using a neural network model. This project is designed to collect data from professional players, process match details, and train a predictive model to determine the likelihood of a team winning based on in-game metrics.
 
-🚀 Project Overview
+---
+
+## 🚀 Project Overview
+
 This repository contains scripts to:
 
-Scrape professional players' PUUIDs from LoL's Challenger leagues (proplayers_scrap.py).
-Collect match IDs from ranked games of these players (proplayers_history.py).
-Extract detailed match features like gold, kills, towers, and dragons at various timestamps (league_data_scraper.py).
-Train a neural network model to predict match outcomes based on extracted features (main_lol_prediction_optimized.py).
+- 🪄 Scrape professional players' PUUIDs from LoL's Challenger leagues (`proplayers_scrap.py`)
+- 🔹 Collect match IDs from ranked games of these players (`proplayers_history.py`)
+- ⚖️ Extract detailed match features like gold, kills, towers, and dragons at various timestamps (`scraping_tools/game_info.py`)
+- 🏋️ Train a neural network model to predict match outcomes based on extracted features (`main.py`)
 
 The project is structured to handle API rate limits, avoid duplicate data, and provide detailed analysis of model performance through metrics and visualizations.
 
-📂 Project Structure
+---
+
+## 📂 Project Structure
+
+```
 lol-match-prediction/
 │
 ├── data/
-│   ├── challenger.txt       # Stores PUUIDs of Challenger players
-│   ├── matches.txt          # Stores match IDs for processing
-│   └── match_features.csv   # Stores extracted match features
+│   ├── challenger.txt         # Stores PUUIDs of Challenger players
+│   ├── matches.txt            # Stores match IDs for processing
+│   └── match_features.csv     # Stores extracted match features
 │
 ├── models/
-│   └── league_scraper.py    # API request handler for Riot Games
+│   └── league_scraper.py      # API request handler for Riot Games
 │
 ├── scraping_tools/
-│   ├── proplayers_scrap.py      # Script to scrape Challenger players' PUUIDs
-│   ├── proplayers_history.py    # Script to collect match IDs from players
-│   └── game_info.py             # Script to extract match features
-├── config.py                # Configuration file for API key
-├── main.py  # Neural network model for prediction
-└── README.md                # Project documentation
+│   ├── proplayers_scrap.py        # Scrape Challenger players' PUUIDs
+│   ├── proplayers_history.py      # Fetch match IDs from players
+│   └── game_info.py               # Extract match features
+│
+├── config.py                  # Configuration file for API key
+├── main.py                    # Neural network model for prediction
+├── requirements.txt           # Python dependencies
+└── README.md                  # This documentation
+```
 
+---
 
-🛠️ Installation
-Prerequisites
+## 🛠️ Installation
 
-Python 3.8+
-A Riot Games API key (get one from developer.riotgames.com)
-Required Python packages (install via requirements.txt)
+### Prerequisites
+- Python 3.8+
+- A Riot Games API key *(get one from [developer.riotgames.com](https://developer.riotgames.com))*
 
-Setup Steps
+### Setup Steps
 
-Clone the Repository
+1. **Clone the Repository**
+```bash
 git clone https://github.com/yourusername/lol-match-prediction.git
 cd lol-match-prediction
+```
 
-
-Install DependenciesCreate a virtual environment and install the required packages:
+2. **Install Dependencies**
+Create a virtual environment and install the required packages:
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-Example requirements.txt:
+**requirements.txt** example:
+```
 pandas
 numpy
 requests
@@ -59,99 +74,109 @@ scikit-learn
 tensorflow
 matplotlib
 seaborn
+```
 
-
-Configure API KeyOpen config.py and add your Riot Games API key:
+3. **Configure API Key**
+Open `config.py` and add your Riot Games API key:
+```python
 API_KEY = "YOUR-API-KEY"  # Replace with your actual API key
+```
 
+4. **Prepare Data Directory**
+Make sure the `data/` directory exists:
+```bash
+mkdir -p data
+```
 
-Prepare Data DirectoryEnsure the data/ directory exists:
-mkdir data
+---
 
+## 📜 Usage
 
+### Step 1: Scrape Challenger Players
+Collect PUUIDs of Challenger players from EUW, NA, and KR:
+```bash
+python scraping_tools/proplayers_scrap.py
+```
+Output: PUUIDs saved to `data/challenger.txt`
 
+### Step 2: Collect Match IDs
+Fetch match IDs from ranked games of these players:
+```bash
+python scraping_tools/proplayers_history.py
+```
+Output: Match IDs saved to `data/matches.txt`
 
-📜 Usage
-Step 1: Scrape Challenger Players
-Run proplayers_scrap.py to collect PUUIDs of Challenger players from EUW, NA, and KR regions:
-python proplayers_scrap.py
+### Step 3: Extract Match Features
+Process match IDs and extract features like gold differences, kills, towers, dragons:
+```bash
+python scraping_tools/game_info.py
+```
+Output: Features saved to `data/match_features.csv`
 
-
-Output: PUUIDs are saved to data/challenger.txt.
-
-Step 2: Collect Match IDs
-Run proplayers_history.py to fetch match IDs from the ranked games of these players:
-python proplayers_history.py
-
-
-Output: Match IDs are saved to data/matches.txt.
-
-Step 3: Extract Match Features
-Run league_data_scraper.py to process match IDs and extract features like gold differences, kills, towers, and dragons at specific timestamps:
-python league_data_scraper.py
-
-
-Output: Features are saved to data/match_features.csv.
-
-Step 4: Train and Evaluate the Model
-Run main_lol_prediction_optimized.py to train a neural network model and predict match outcomes:
-python main_lol_prediction_optimized.py
-
-
+### Step 4: Train and Evaluate the Model
+Train the model and predict match outcomes:
+```bash
+python main.py
+```
 Output:
-Trained model and artifacts (lol_model.h5, lol_preprocessor.pkl, etc.).
-Visualizations (e.g., confusion_matrix.png, calibration_curve.png).
-Performance metrics and error analysis printed to the console.
+- Trained model and artifacts (`lol_model.h5`, `lol_preprocessor.pkl`, etc.)
+- Visualizations: confusion matrix, calibration curve, training history
+- Performance metrics printed in the console
 
+---
 
+## 📊 Model Details
 
+The prediction model (`main.py`) uses a neural network to predict the probability of the **Blue** team winning. Features include:
 
-📊 Model Details
-The prediction model (main_lol_prediction_optimized.py) uses a neural network to predict the probability of the Blue team winning a match. Key features include:
+- Gold and kill differences at 5, 10, 15, 20, and 25 minutes
+- Towers, dragons, and ward counts
+- Cumulative team stats
+- Champion picks (one-hot encoded)
 
-Gold and kill differences at 5, 10, 15, 20, and 25 minutes.
-Tower, dragon, and ward counts for both teams.
-Cumulative performance metrics (gold, kills, towers, objectives).
-Champion selections for both teams (one-hot encoded).
+### Model Architecture
 
-Model Architecture
+- **Input Layer:** Scaled features + one-hot champions
+- **Hidden Layers:**
+  - Dense (64), ReLU, BatchNorm, Dropout
+  - Dense (32), ReLU, BatchNorm, Dropout
+  - Dense (16), ReLU, BatchNorm, Dropout
+- **Output Layer:** Sigmoid (Blue win probability)
 
-Input Layer: Scaled numeric features + one-hot encoded champions.
-Hidden Layers: 3 dense layers (64, 32, 16 neurons) with ReLU activation, BatchNormalization, and Dropout.
-Output Layer: Sigmoid activation for binary classification (Blue Win probability).
+### Outputs
+- Accuracy, AUC-ROC, F1-Score, Sensitivity, Specificity
+- Visuals: Confusion matrix, calibration curve, training plots
 
-Outputs
+---
 
-Metrics: Accuracy, AUC-ROC, Sensitivity, Specificity, F1-Score.
-Visualizations:
-Confusion Matrix
-Calibration Curve
-Training History (loss and accuracy)
-Feature Importance
+## ⚠️ Notes
 
+- **API Rate Limits:** Scripts use `time.sleep()` to comply with Riot's rate limits
+- **Remakes:** Matches under 15 minutes are skipped
+- **In Progress:** Expect improvements (e.g. more features, better calibration, regional support)
 
+---
 
+## 🤝 Contributing
 
-⚠️ Notes
+Contributions welcome!
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
 
-API Rate Limits: The scripts include delays (time.sleep) to respect Riot Games API rate limits. Adjust these if needed based on your API key's limits.
-Data Quality: Matches shorter than 15 minutes are skipped to avoid remakes.
-Work in Progress: The project is actively being developed. Future improvements may include better calibration, additional features (e.g., late-game objectives), and support for more regions.
+---
 
+## 📝 License
 
-🤝 Contributing
-Contributions are welcome! Please:
+This project is licensed under the MIT License. See the `LICENSE` file.
 
-Fork the repository.
-Create a new branch (git checkout -b feature/your-feature).
-Commit your changes (git commit -m "Add your feature").
-Push to the branch (git push origin feature/your-feature).
-Open a Pull Request.
+---
 
+## 📧 Contact
 
-📝 License
-This project is licensed under the MIT License. See the LICENSE file for details.
+For questions or suggestions:
+**Email:** rauljimm.dev@gmail.com
 
-📧 Contact
-For questions or suggestions, feel free to open an issue or reach out via email: rauljimm.dev@gmail.com.
 Happy predicting! 🎉
