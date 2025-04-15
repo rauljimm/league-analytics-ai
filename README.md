@@ -8,8 +8,8 @@ A comprehensive pipeline for scraping League of Legends (LoL) match data, extrac
 
 This repository contains scripts to:
 
-- 🪄 Scrape professional players' PUUIDs from LoL's Challenger leagues (`proplayers_scrap.py`)
-- 🔹 Collect match IDs from ranked games of these players (`proplayers_history.py`)
+- 🪄 Scrape professional players' PUUIDs from LoL's Challenger leagues (`scraping_tools/proplayers_scrap.py`)
+- 🔹 Collect match IDs from ranked games of these players (`scraping_tools/proplayers_history.py`)
 - ⚖️ Extract detailed match features like gold, kills, towers, and dragons at various timestamps (`scraping_tools/game_info.py`)
 - 🏋️ Train a neural network model to predict match outcomes based on extracted features (`main.py`)
 
@@ -53,8 +53,8 @@ lol-match-prediction/
 
 1. **Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/lol-match-prediction.git
-cd lol-match-prediction
+git clone https://github.com/rauljimm/league-analytics-ai.git
+cd league-analytics-ai
 ```
 
 2. **Install Dependencies**
